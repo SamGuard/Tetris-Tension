@@ -8,10 +8,11 @@ $(document).ready(function() {
 
     try{
         if(process.env.PORT){
-            Date.now();
+            console.log("not using port");
         }
         IP = `https://${window.location.hostname}`;
     }catch(err){
+        console.log("using port");
         IP = `https://${window.location.hostname}:${port}`;
         
     }
