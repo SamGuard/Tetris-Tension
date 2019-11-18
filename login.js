@@ -10,9 +10,9 @@ $(document).ready(function() {
         if(process.env.PORT){
             Date.now();
         }
-        IP = `http://${window.location.hostname}`;
+        IP = `https://${window.location.hostname}`;
     }catch(err){
-        IP = `http://${window.location.hostname}:${port}`;
+        IP = `https://${window.location.hostname}:${port}`;
         
     }
     console.log(IP);
