@@ -3,8 +3,8 @@ $(document).ready(function() {
     $('#gameScreen').hide();
 
     $('#incorrect').hide();
-    var port = 3000 || process.env.PORT;
-    var IP = `https://${window.location.hostname}:${port}`;
+    //var port = 3000 || process.env.PORT;
+    var IP = `https://${window.location.hostname}`;
     console.log(IP);
     var room = "";
     var user = "";
