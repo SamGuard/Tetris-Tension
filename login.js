@@ -3,7 +3,8 @@ $(document).ready(function() {
     $('#gameScreen').hide();
 
     $('#incorrect').hide();
-    var IP = `https://${window.location.hostname}:${process.env.PORT}`;
+    var port = 3000 || process.env.PORT;
+    var IP = `https://${window.location.hostname}:${port}`;
     console.log(IP);
     var room = "";
     var user = "";
@@ -158,6 +159,7 @@ $(document).ready(function() {
     }
 
     function GetPin() {
+        console.log(IP);
         $.get(IP + "/create-room/",
         function(data,status){
             $( "#gamePin" ).text(data);
