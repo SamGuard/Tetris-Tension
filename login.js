@@ -7,9 +7,8 @@ $(document).ready(function() {
     var IP;
 
     try{
-        if(process.env.PORT){
-            console.log("not using port");
-        }
+        
+        console.log(process.env.PORT);
         IP = `https://${window.location.hostname}`;
     }catch(err){
         console.log("using port");
