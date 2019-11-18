@@ -7,7 +7,7 @@ $(document).ready(function() {
     var IP;
 
     try{
-        
+        console.log("Getting port");
         console.log(process.env.PORT);
         IP = `https://${window.location.hostname}`;
     }catch(err){
