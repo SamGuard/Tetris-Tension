@@ -5,15 +5,12 @@ $(document).ready(function() {
     $('#incorrect').hide();
     var port = 3000;
     var IP;
-
-    try{
-        console.log("Getting port");
-        console.log(process.env.PORT);
-        IP = `https://${window.location.hostname}`;
-    }catch(err){
+    var process = process || 3000;
+    if(process == false){
         console.log("using port");
         IP = `https://${window.location.hostname}:${port}`;
-        
+    }else{
+        IP = `https://${window.location.hostname}`;       
     }
     console.log(IP);
     var room = "";
