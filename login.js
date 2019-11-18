@@ -3,7 +3,7 @@ $(document).ready(function() {
     $('#gameScreen').hide();
 
     $('#incorrect').hide();
-    var IP = "http://192.168.43.174:3000";
+    var IP = `http://${window.location.hostname}:3000`;
     var room = "";
     var user = "";
     var connected = false;
