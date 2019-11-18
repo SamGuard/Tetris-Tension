@@ -3,7 +3,8 @@ $(document).ready(function() {
     $('#gameScreen').hide();
 
     $('#incorrect').hide();
-    var IP = `http://${window.location.hostname}:3000`;
+    var IP = `http://${window.location.hostname}:${process.env.PORT}`;
+    console.log(IP);
     var room = "";
     var user = "";
     var connected = false;
