@@ -5,27 +5,32 @@ $(document).ready(function() {
     $('#incorrect').hide();
     var port = 3000;
     var IP;
-    var process = process || 3000;
-    if(process == false){
+    if(port == 3000){
         console.log("using port");
-        IP = `https://${window.location.hostname}:${port}`;
+        IP = `ws://${window.location.hostname}:${port}`;
     }else{
-        IP = `https://${window.location.hostname}`;       
+        IP = `ws://${window.location.hostname}`;       
     }
     console.log(IP);
-    var room = "";
+    var room = " ";
     var user = "";
     var connected = false;
     var peer;
     var audio;
     var reset = document.getElementById('reset');
     var endWindow = document.getElementById('loseWindow');
+    var lastMessage = -1
+
+    var refreshID = setInterval (function() { Check() }, 2000);
+
+    //socketssssss to server
+    var connection = new WebSocket(IP);
 
     reset.onclick = function() {
       location.reload();
     }
 
-    var refreshID = setInterval (function() { Check() }, 2000);
+    
 
     function Check() {
         if (gameOver == true) {
@@ -39,11 +44,23 @@ $(document).ready(function() {
     }
 
     function InitSockets() {
+        console.log("initalizing sockets");
         peer.on('error', err => console.log('error', err));
 
         // POST signal to server, then repeatedly GET
         peer.on('signal', data => {
+            console.log("signal");
             if (!connected) {
+                json = JSON.stringify({type:"message", purpose:"pass", data:{
+                    user: user,
+                    room: room,
+                    data: data
+                }}); 
+                connection.send(json);
+
+                PollForUpdate();
+
+                /*
                 $.post(IP + "/conn/",
                 {
                     user: user,
@@ -53,6 +70,7 @@ $(document).ready(function() {
                 .done(function(msg){
                     PollForUpdate();
                 });
+                */
             }
         });
 
@@ -60,6 +78,7 @@ $(document).ready(function() {
         peer.on('connect', () => {
             connected = true;
             peer.send('connected');
+            connection.send(JSON.stringify({type:"message", purpose:"close"}))
             if (user == "c") {
                 document.onkeydown = CheckKey;
                 $('#gameScreen').hide();
@@ -133,7 +152,17 @@ $(document).ready(function() {
         $( "#createScreen" ).hide();
     });
     function PollForUpdate() {
-      var counter = 0;
+        var counter = 0;
+        //var refreshPollID = setInterval (function() {
+        if(lastMessage != -1){
+            console.log("signalling");
+            peer.signal(JSON.stringify(lastMessage.data));
+            lastMessage = -1;
+        }
+
+        //}, 10);
+
+        /*
         var refreshID = setInterval (function() {
             counter++;
             if (connected) {
@@ -163,10 +192,29 @@ $(document).ready(function() {
                     }
                 });
         }, 500);
+        */
     }
 
     function GetPin() {
-        console.log(IP);
+        var json = JSON.stringify({type:"message", purpose:"init", pin:"-1", data:""});
+        connection.send(json);
+
+        var refreshGetID = setInterval(function(){
+            if(room != " "){
+                clearInterval(refreshGetID);
+                $( "#gamePin" ).text(room);
+                user = "c";
+                peer = new SimplePeer ({ initiator: true });
+                InitSockets();
+                
+            }
+        },10);
+        
+        
+
+
+        /*
+        connection.sendUTF8()
         $.get(IP + "/create-room/",
         function(data,status){
             $( "#gamePin" ).text(data);
@@ -175,9 +223,38 @@ $(document).ready(function() {
             peer = new SimplePeer ({ initiator: true });
             InitSockets();
         });
+        */
     }
 
     function PostPin(val) {
+        var data = " ";
+        var json = JSON.stringify({type:"message", purpose:"init", pin:val.toLowerCase(), data:""});
+        connection.send(json);
+
+        var refreshPostID = setInterval(function(){
+            if(room != " "){
+                console.log("hello there");
+                clearInterval(refreshPostID);
+                if(room == "-1"){
+                    $('#incorrect').show();
+                    $('#incorrect').text('Incorrect pin.');
+                }else{
+                    $('#incorrect').hide();
+                    $( "#gamePin" ).text("Waiting...");
+                    $( "#pin" ).text("");
+                    console.log("joining");
+                    user = "j";
+                    peer = new SimplePeer();
+                    InitSockets();
+                    PollForUpdate(); 
+                }
+
+            }
+        },10);
+
+        
+
+        /*
         $.post(IP + "/join-room/",
         {
             pin: val.toLowerCase()
@@ -198,6 +275,30 @@ $(document).ready(function() {
                 PollForUpdate();
             }
         });
+        */
+    }
+
+    connection.onmessage = function (message) {
+        // try to parse JSON message. Because we know that the server
+        // always returns JSON this should work without any problem but
+        // we should make sure that the massage is not chunked or
+        // otherwise damaged.
+        try {
+          var data = JSON.parse(message.data);
+          console.log(data);
+        } catch (e) {
+          console.log('Invalid JSON: ', message.data);
+          return;
+        }
+
+        if(data.purpose == "init"){
+            console.log(data.data+" "+data.pin);
+            room = data.pin;
+
+        }else if(data.purpose == "pass"){
+            lastMessage = data.data;
+            PollForUpdate();
+        }
     }
 
 });
