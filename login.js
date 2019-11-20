@@ -5,7 +5,7 @@ $(document).ready(function() {
     $('#incorrect').hide();
     var port = 3000;
     var IP;
-    if(port == 3000){
+    if(port == "hello"){
         console.log("using port");
         IP = `wss://${window.location.hostname}:${port}`;
     }else{
