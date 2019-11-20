@@ -7,9 +7,9 @@ $(document).ready(function() {
     var IP;
     if(port == 3000){
         console.log("using port");
-        IP = `ws://${window.location.hostname}:${port}`;
+        IP = `wss://${window.location.hostname}:${port}`;
     }else{
-        IP = `ws://${window.location.hostname}`;       
+        IP = `wss://${window.location.hostname}`;       
     }
     console.log(IP);
     var room = " ";
