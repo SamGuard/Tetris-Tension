@@ -139,11 +139,11 @@ wsServer.on('request', function(request) {
 				console.log(IP);
 				for(var i = 0; i < rooms.length; i++){
 					console.log(rooms);
-					if(rooms[i].id1 == IP){
+					if(rooms[i].id1 == IP && rooms[i].pin == json.data.room){
 						found = true;
 						rooms[i].send(json,2);
 						//console.log(`${json} sent to ${rooms[i].id2}`);
-					}else if(rooms[i].id2 == IP){
+					}else if(rooms[i].id2 == IP && rooms[i].pin == json.data.room){
 						found = true;
 						rooms[i].send(json,1);
 						//console.log(`${json} sent to ${rooms[i].id1}`);
