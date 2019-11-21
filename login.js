@@ -140,6 +140,7 @@ $(document).ready(function() {
         var json = JSON.stringify({type:"message", purpose:"init", pin:"-1", data:""});
         connection.send(json);
         peer = new SimplePeer ({ initiator: true });
+        InitSockets();
         user = "c";
     }
 
@@ -148,6 +149,7 @@ $(document).ready(function() {
         var json = JSON.stringify({type:"message", purpose:"init", pin:val.toLowerCase(), data:""});
         connection.send(json);
         peer = new SimplePeer ();
+        InitSockets();
 
         user = "j";
     }
