@@ -56,6 +56,7 @@ $(document).ready(function() {
                     room: room,
                     data: data
                 }}); 
+                console.log(data);
                 connection.send(json);
             }
         });
@@ -178,6 +179,7 @@ $(document).ready(function() {
             else {
                 $( "#gamePin" ).text(data.pin);
                 room = data.pin;
+                
             }
         }
         else if(data.purpose == "pass"){
