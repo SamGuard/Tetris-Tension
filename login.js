@@ -15,7 +15,7 @@ $(document).ready(function() {
     var room = " ";
     var user = "";
     var connected = false;
-    var peer;
+    var peer = null;
     var audio;
     var reset = document.getElementById('reset');
     var endWindow = document.getElementById('loseWindow');
@@ -147,6 +147,8 @@ $(document).ready(function() {
         var data = " ";
         var json = JSON.stringify({type:"message", purpose:"init", pin:val.toLowerCase(), data:""});
         connection.send(json);
+        peer = new SimplePeer ();
+
         user = "j";
     }
 
@@ -159,10 +161,6 @@ $(document).ready(function() {
     */
     connection.onmessage = function (message) {
         try {
-            if(peer != null){
-                peer = new SimplePeer();
-                InitSockets();
-            }
             var data = JSON.parse(message.data);
             console.log(data);
         } catch (e) {
