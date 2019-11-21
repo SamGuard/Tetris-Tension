@@ -245,4 +245,4 @@ s.moveDown(cell, score);
 var moves = 0;
 setInterval(function(){
     window.cell = window.s.moveDown(window.cell, window.score);
-}, 400);
+}, 200);

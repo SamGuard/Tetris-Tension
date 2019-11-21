@@ -9,7 +9,7 @@ $(document).ready(function() {
         console.log("using port");
         IP = `ws://${window.location.hostname}:${port}`;
     }else{
-        IP = `ws://${window.location.hostname}`;       
+        IP = `wss://${window.location.hostname}`;       
     }
     console.log(IP);
     var room = " ";
