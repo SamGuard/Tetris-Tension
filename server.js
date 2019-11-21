@@ -122,7 +122,7 @@ wsServer.on('request', function(request) {
 						}
 					}
 					if(found == true){
-						json = JSON.stringify({type:"message", purpose:"init", pin:rooms[index].pin, data:`Room added pin:${pin}, IP:${IP}`});
+						json = JSON.stringify({type:"message", purpose:"init", pin:rooms[index].pin, data:`Room added pin:${rooms[index].pin}, IP:${IP}`});
 					}else{
 						json = 	JSON.stringify({type:"message", purpose:"init", pin:"-1", data:"not found"});
 					}
@@ -130,7 +130,7 @@ wsServer.on('request', function(request) {
 				}
 
 				sendToClient(json,IP);
-				
+
 				rooms[rooms.length-1].sendBuffer();
 
 
