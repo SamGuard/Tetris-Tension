@@ -15,7 +15,7 @@ $(document).ready(function() {
     var room = " ";
     var user = "";
     var connected = false;
-    var peer = "";
+    var peer = " ";
     var audio;
     var reset = document.getElementById('reset');
     var endWindow = document.getElementById('loseWindow');
