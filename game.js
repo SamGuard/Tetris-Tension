@@ -230,7 +230,7 @@ var ctx = canvas.getContext("2d");
 var cell = [];
 for(var x = 0; x < 10; x++){
     cell.push([]);
-    for(var y = 0; y < 20; y++){
+    for(var y = 0; y < 30; y++){
         cell[x].push(0);
     }
 }
