@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $('#createScreen').hide();
     $('#gameScreen').hide();
+    $('#aaa').hide();
 
     $('#incorrect').hide();
     var port = 3000;
@@ -152,6 +153,8 @@ $(document).ready(function() {
                     $('#gameScreen').hide();
                     $('#createScreen').hide();
                     $('#mainScreen').hide(); 
+                    $('#aaa').show();
+
                     console.log("Sent: " + json);
 
                     connection.send(json);
