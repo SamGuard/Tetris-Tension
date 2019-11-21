@@ -77,17 +77,17 @@ $(document).ready(function() {
 
     }
 
-        function CheckKey2(e) {
-            var json = JSON.stringify({type:"message", purpose:"pass", data:{
-                user: user,
-                room: room,
-                data: e
-            }});
-                                console.log("Sent: " + json);
+    function CheckKey2(e) {
+        var json = JSON.stringify({type:"message", purpose:"pass", data:{
+            user: user,
+            room: room,
+            data: e
+        }});
+                            console.log("Sent: " + json);
 
-            connection.send(json);
-        }
-	}
+        connection.send(json);
+    }
+	
 
     $("#creategame").click(function() {
         $( "#mainScreen" ).hide();
