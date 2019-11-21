@@ -15,7 +15,7 @@ $(document).ready(function() {
     var room = " ";
     var user = "";
     var connected = false;
-    var peer;
+    var peer = "";
     var audio;
     var reset = document.getElementById('reset');
     var endWindow = document.getElementById('loseWindow');
@@ -204,7 +204,9 @@ $(document).ready(function() {
                 clearInterval(refreshGetID);
                 $( "#gamePin" ).text(room);
                 user = "c";
-                peer = new SimplePeer ({ initiator: true });
+                if (peer == " "){
+                    peer = new SimplePeer ({ initiator: true });
+                }
                 InitSockets();
                 
             }
@@ -244,7 +246,9 @@ $(document).ready(function() {
                     $( "#pin" ).text("");
                     console.log("joining");
                     user = "j";
-                    peer = new SimplePeer();
+                    if(peer == " "){
+                        peer = new SimplePeer();
+                    }
                     InitSockets();
                     PollForUpdate(); 
                 }
@@ -279,16 +283,15 @@ $(document).ready(function() {
     }
 
     connection.onmessage = function (message) {
-        // try to parse JSON message. Because we know that the server
-        // always returns JSON this should work without any problem but
-        // we should make sure that the massage is not chunked or
-        // otherwise damaged.
         try {
-          var data = JSON.parse(message.data);
-          console.log(data);
+            if(peer == " "){
+                peer = new SimplePeer();
+            }
+            var data = JSON.parse(message.data);
+            console.log(data);
         } catch (e) {
-          console.log('Invalid JSON: ', message.data);
-          return;
+            console.log('Invalid JSON: ', message.data);
+            return;
         }
 
         if(data.purpose == "init"){
