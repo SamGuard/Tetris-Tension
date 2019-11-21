@@ -60,6 +60,34 @@ $(document).ready(function() {
             connection.send(json);
         }
 	}
+    function moveup() {
+             CheckKey2("38");   
+  
+    }
+    function movedown() {
+                     CheckKey2("40");   
+
+    }
+    function moveleft() {
+             CheckKey2("37");   
+
+    }
+    function moveright() {
+                     CheckKey2("39");   
+
+    }
+
+        function CheckKey2(e) {
+            var json = JSON.stringify({type:"message", purpose:"pass", data:{
+                user: user,
+                room: room,
+                data: e
+            }});
+                                console.log("Sent: " + json);
+
+            connection.send(json);
+        }
+	}
 
     $("#creategame").click(function() {
         $( "#mainScreen" ).hide();
