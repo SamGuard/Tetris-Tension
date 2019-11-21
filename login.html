@@ -78,10 +78,28 @@
                 </div>
                 <div id="aaa">
                     <table>
-    <tr><th></th><th><button onclick="moveup()">UP</button></th><th></th></tr>
-    <tr><th><button onclick="moveleft()">LEFT</button></th><th></th><th><button onclick="moveright()">RIGHT</button></th></tr>
-    <tr><th></th><th><button onclick="movedown()">DOWN</button></th><th></th></tr>
+    <tr><th></th><th><button type="button" id="moveup">Up</button></th><th></th></tr>
+    <tr><th><button type="button" id="moveleft">Left</button></th><th></th><th><button type="button" id="moveright">Right</button></th></tr>
+    <tr><th></th><th><button type="button" id="movedown">Down</button></th><th></th></tr>
 </table>
+                    <script>
+                            function moveup() {
+             CheckKey2("38");   
+  
+    }
+    function movedown() {
+                     CheckKey2("40");   
+
+    }
+    function moveleft() {
+             CheckKey2("37");   
+
+    }
+    function moveright() {
+                     CheckKey2("39");   
+
+    }
+                    </script>
                 </div>
             </div>
 

@@ -1,4 +1,18 @@
+
+
 $(document).ready(function() {
+
+
+    function CheckKey2(e) {
+        var json = JSON.stringify({type:"message", purpose:"pass", data:{
+            user: user,
+            room: room,
+            data: e
+        }});
+                            console.log("Sent: " + json);
+
+        connection.send(json);
+    }
     $('#createScreen').hide();
     $('#gameScreen').hide();
     $('#aaa').hide();
@@ -61,34 +75,19 @@ $(document).ready(function() {
             connection.send(json);
         }
 	}
-    function moveup() {
+
+	   $("#moveup").click(function() {
              CheckKey2("38");   
-  
-    }
-    function movedown() {
-                     CheckKey2("40");   
-
-    }
-    function moveleft() {
+    });   
+    	   $("#movedown").click(function() {
+             CheckKey2("40");   
+    });  
+    	   $("#moveleft").click(function() {
              CheckKey2("37");   
-
-    }
-    function moveright() {
-                     CheckKey2("39");   
-
-    }
-
-    function CheckKey2(e) {
-        var json = JSON.stringify({type:"message", purpose:"pass", data:{
-            user: user,
-            room: room,
-            data: e
-        }});
-                            console.log("Sent: " + json);
-
-        connection.send(json);
-    }
-	
+    });  
+    	   $("#moveright").click(function() {
+             CheckKey2("39");   
+    });   
 
     $("#creategame").click(function() {
         $( "#mainScreen" ).hide();
