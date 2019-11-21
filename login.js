@@ -207,9 +207,8 @@ $(document).ready(function() {
                 user = "c";
                 if (peer == " "){
                     peer = new SimplePeer ({ initiator: true });
-                }
-                InitSockets();
-                
+                    InitSockets();
+                }                
             }
         },10);
         
@@ -249,8 +248,8 @@ $(document).ready(function() {
                     user = "j";
                     if(peer == " "){
                         peer = new SimplePeer();
+                        InitSockets();
                     }
-                    InitSockets();
                     PollForUpdate(); 
                 }
 
