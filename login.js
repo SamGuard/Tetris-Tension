@@ -287,6 +287,7 @@ $(document).ready(function() {
         try {
             if(peer == " "){
                 peer = new SimplePeer();
+                InitSockets();
             }
             var data = JSON.parse(message.data);
             console.log(data);
