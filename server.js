@@ -131,15 +131,13 @@ wsServer.on('request', function(request) {
 
 				sendToClient(json,IP);
 
-				rooms[rooms.length-1].sendBuffer();
-
 
 			}else if(data.purpose === "pass"){
 				var json = data;
 				var found = false;
 				console.log(IP);
 				for(var i = 0; i < rooms.length; i++){
-					console.log(rooms);
+					//console.log(rooms);
 					if(rooms[i].id1 == IP && rooms[i].pin == json.data.room){
 						found = true;
 						rooms[i].send(json,2);
