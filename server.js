@@ -23,7 +23,7 @@ class room{
 		this.pin = pin;
 		this.id1 = id1;
 		this.id2 = null;
-		this.buffer = []
+		this.buffer = [];
 		this.interval;
 	}
 
@@ -109,7 +109,6 @@ wsServer.on('request', function(request) {
 						salt: saltCounter // A salt value or function
 					});
 					rooms.push(new room(ids.generate(),IP));
-					rooms[rooms.length-1].interval = setInterval(function(){rooms[rooms.length-1].sendBuffer()},10);
 					saltCounter++;
 					json = JSON.stringify({type:"message", purpose:"init", pin:rooms[rooms.length-1].pin, data:`Added to room, pin:${pin}, IP:${IP}`});
 					console.log("created room");
@@ -131,6 +130,8 @@ wsServer.on('request', function(request) {
 				}
 
 				sendToClient(json,IP);
+				
+				rooms[rooms.length-1].sendBuffer();
 
 
 			}else if(data.purpose === "pass"){
