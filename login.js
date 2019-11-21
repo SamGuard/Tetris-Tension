@@ -45,6 +45,7 @@ $(document).ready(function() {
 
     function InitSockets() {
         console.log("initalizing sockets");
+        console.log(peer);
         peer.on('error', err => console.log('error', err));
 
         // POST signal to server, then repeatedly GET
