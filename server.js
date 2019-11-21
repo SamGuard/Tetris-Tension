@@ -58,7 +58,7 @@ function sendToClient(message,IP){
 	for(var i = 0; i < clients.length; i++){
 		if(clients[i].remoteAddress == IP){
 			clients[i].sendUTF(message);
-			console.log(`sent ${message}`);
+			console.log(`sent!`);
 		}
 	}
 }
@@ -110,7 +110,7 @@ wsServer.on('request', function(request) {
 					});
 					rooms.push(new room(ids.generate(),IP));
 					saltCounter++;
-					json = JSON.stringify({type:"message", purpose:"init", pin:rooms[rooms.length-1].pin, data:`Added to room, pin:${pin}, IP:${IP}`});
+					json = JSON.stringify({type:"message", purpose:"init", pin:rooms[rooms.length-1].pin, data:`created`});
 					console.log("created room");
 				}else{
 
@@ -122,7 +122,7 @@ wsServer.on('request', function(request) {
 						}
 					}
 					if(found == true){
-						json = JSON.stringify({type:"message", purpose:"init", pin:rooms[index].pin, data:`Room added pin:${rooms[index].pin}, IP:${IP}`});
+						json = JSON.stringify({type:"message", purpose:"init", pin:rooms[index].pin, data:`sent`});
 					}else{
 						json = 	JSON.stringify({type:"message", purpose:"init", pin:"-1", data:"not found"});
 					}
