@@ -40,6 +40,15 @@
                     <button type="button" id="joingame">Join Game</button>
                     </br></br>
                     <button type="button" id="creategame">Create Game</button>
+                    <br><br>
+                    <button type="button" id="helpButton">Help</button>
+                </div>
+                <div id="helpScreen">
+                    <p>This is a game about co-operation and requires 2 players to play as well as a way for the two players to speak to each other (also you cant look at their
+                     screen). This is Tetris, but with a twist. 1 player will be able to see the normal Tetris game board but will not be able to control the pieces falling, the
+                      other player will have the controls (up key for rotation, left to move left, right to move right and down to move down) but will not be able to see the screen. The two players must work together to play Tetris. To start a game get one player to create a room, this will give you a room key the other player then enters the key and clicks join game the game should start after that. You can use the arrow keys on your keyboard or the buttons on screen. Good luck and have fun.
+                  </p>
+                  <button type="button" id="backHelpToMain">Back</button>
                 </div>
 
                 <div id="createScreen">
@@ -63,12 +72,43 @@
                             </th>
                         </tr>
                     </table>
+
+
+    
+
+
+
 <!--
                 <audio src="mii.m4A" autoplay="autoplay" loop>
                     not compatable
                 </audio>-->
         <script src="game.js"></script>
 
+                </div>
+                <div id="aaa">
+                    <table>
+    <tr><th></th><th><button type="button" id="moveup">Up</button></th><th></th></tr>
+    <tr><th><button type="button" id="moveleft">Left</button></th><th></th><th><button type="button" id="moveright">Right</button></th></tr>
+    <tr><th></th><th><button type="button" id="movedown">Down</button></th><th></th></tr>
+</table>
+                    <script>
+                            function moveup() {
+             CheckKey2("38");   
+  
+    }
+    function movedown() {
+                     CheckKey2("40");   
+
+    }
+    function moveleft() {
+             CheckKey2("37");   
+
+    }
+    function moveright() {
+                     CheckKey2("39");   
+
+    }
+                    </script>
                 </div>
             </div>
 

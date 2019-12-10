@@ -1,114 +1,94 @@
+
+
 $(document).ready(function() {
+
+
+    function CheckKey2(e) {
+        var json = JSON.stringify({type:"message", purpose:"pass", data:{
+            user: user,
+            room: room,
+            data: e
+        }});
+                            console.log("Sent: " + json);
+
+        connection.send(json);
+    }
     $('#createScreen').hide();
     $('#gameScreen').hide();
+    $('#helpScreen').hide();
+    $('#aaa').hide();
 
     $('#incorrect').hide();
-    var IP = "http://192.168.43.174:3000";
-    var room = "";
+    var port = 3000;
+    var IP;
+    if(port == "hello"){
+        console.log("using port");
+        IP = `ws://${window.location.hostname}:${port}`;
+    }else{
+        IP = `wss://${window.location.hostname}`;       
+    }
+    console.log(IP);
+    var room = " ";
     var user = "";
     var connected = false;
-    var peer;
+    var peer = null;
     var audio;
     var reset = document.getElementById('reset');
     var endWindow = document.getElementById('loseWindow');
+
+    var refreshID = setInterval (function() { Check() }, 2000);
+
+    //socketssssss to server
+    var connection = new WebSocket(IP);
 
     reset.onclick = function() {
       location.reload();
     }
 
-    var refreshID = setInterval (function() { Check() }, 2000);
-
     function Check() {
         if (gameOver == true) {
-          endWindow.style.display = "block";
-          document.getElementById("finalScore").innerHTML = "Score: " + score;
-          document.getElementById("finalLines").innerHTML = "Lines filled: " + lines;
-          $('#gameScreen').hide();
-          peer.send("lost:" + score + ":" + lines);
+            endWindow.style.display = "block";
+            document.getElementById("finalScore").innerHTML = "Score: " + score;
+            document.getElementById("finalLines").innerHTML = "Lines filled: " + lines;
+            $('#gameScreen').hide();
+            var json = JSON.stringify({type:"message", purpose:"pass", data:{
+                user: user,
+                room: room,
+                data: "lost:" + score + ":" + lines
+            }});
+                                console.log("Sent: " + json);
+
+            connection.send(json);
           clearInterval(refreshID);
         }
-    }
-
-    function InitSockets() {
-        peer.on('error', err => console.log('error', err));
-
-        // POST signal to server, then repeatedly GET
-        peer.on('signal', data => {
-            if (!connected) {
-                $.post(IP + "/conn/",
-                {
-                    user: user,
-                    room: room,
-                    data: data
-                })
-                .done(function(msg){
-                    PollForUpdate();
-                });
-            }
-        });
-
-        // Once connected ->
-        peer.on('connect', () => {
-            connected = true;
-            peer.send('connected');
-            if (user == "c") {
-                document.onkeydown = CheckKey;
-                $('#gameScreen').hide();
-                $('#createScreen').hide();
-                $('#mainScreen').hide();
-                audio = new Audio('mii.m4a');
-                audio.loop = true;
-                audio.play();
-            }
-            else {
-                $('#gameScreen').show();
-                $('#createScreen').hide();
-                $('#mainScreen').hide();
-                audio = new Audio('mii.m4a');
-                audio.loop = true;
-                audio.play();
-                requestAnimationFrame(mainLoop);
-            }
-        });
-
-        // Once connected -> important data between people
-        peer.on('data', data => {
-            if (data == "connected") {
-                connected = true;
-            }
-            else {
-                if (data == '38') {
-                    window.s.rotateShape(window.cell);
-                }
-                else if (data == '40') {
-                    window.s.moveDown(window.cell);
-                }
-                else if (data == '37') {
-                  window.s.moveLeft(window.cell);
-                }
-                else if (data == '39') {
-                    window.s.moveRight(window.cell);
-                }
-                else {
-                  var out = String(data).split(':');
-                  endWindow.style.display = "block";
-                  document.getElementById("finalScore").innerHTML = "Score: " + out[1];
-                  document.getElementById("finalLines").innerHTML = "Lines filled: " + out[2];
-                  $('#gameScreen').hide();
-                  audio.pause();
-                }
-            }
-        });
     }
 
     function CheckKey(e) {
 		e = e || window.event;
         if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40') {
-            peer.send(e.keyCode);
+            var json = JSON.stringify({type:"message", purpose:"pass", data:{
+                user: user,
+                room: room,
+                data: e.keyCode
+            }});
+                                console.log("Sent: " + json);
+
+            connection.send(json);
         }
 	}
 
-
+	   $("#moveup").click(function() {
+             CheckKey2("38");   
+    });   
+    	   $("#movedown").click(function() {
+             CheckKey2("40");   
+    });  
+    	   $("#moveleft").click(function() {
+             CheckKey2("37");   
+    });  
+    	   $("#moveright").click(function() {
+             CheckKey2("39");   
+    });   
 
     $("#creategame").click(function() {
         $( "#mainScreen" ).hide();
@@ -123,71 +103,112 @@ $(document).ready(function() {
         $( "#mainScreen" ).fadeIn();
         $( "#createScreen" ).hide();
     });
-    function PollForUpdate() {
-      var counter = 0;
-        var refreshID = setInterval (function() {
-            counter++;
-            if (connected) {
-                clearInterval(refreshID);
-            }else if(counter >= 100){
-                room = "";
-                user = "";
-                connected = false;
-                peer;
-                $( "#mainScreen" ).show();
-                $('#createScreen').hide();
-                $('#gameScreen').hide();
-                $('#incorrect').text("Connection timed out.");
-                $('#incorrect').show();
 
-                clearInterval(refreshID);
-            }
-            $.get(IP + "/conn?user=" + user + "&room=" + room)
-                .done(function(msg){
-                    if (msg == "out") {
-                        clearInterval(refreshID);
-                    }
-                    else if (msg != "fail") {
-                        peer.signal(JSON.stringify(JSON.parse(msg).data));
+    $("#helpButton").click(function(){
+        $("#mainScreen").hide();
+        $("#helpScreen").fadeIn();
+    });
 
-                        clearInterval(refreshID);
-                    }
-                });
-        }, 500);
+    $("#backHelpToMain").click(function(){
+        $("#mainScreen").fadeIn();
+        $("#helpScreen").hide();
+    });
+    
+    function GetPin() { // For Create Game
+        var json = JSON.stringify({type:"message", purpose:"init", pin:"-1", data:""});
+        user = "j";
+        console.log("Sent: " + json);
+        connection.send(json);
     }
 
-    function GetPin() {
-        $.get(IP + "/create-room/",
-        function(data,status){
-            $( "#gamePin" ).text(data);
-            room = data;
-            user = "c";
-            peer = new SimplePeer ({ initiator: true });
-            InitSockets();
-        });
+    function PostPin(val) { // For Join Game
+        var json = JSON.stringify({type:"message", purpose:"init", pin:val.toLowerCase(), data:""});
+        user = "c";
+                            console.log("Sent: " + json);
+
+        connection.send(json);
     }
 
-    function PostPin(val) {
-        $.post(IP + "/join-room/",
-        {
-            pin: val.toLowerCase()
-        },
-        function(data,status){
-            if (data == "not found") {
+    
+    /* 
+    Purpose types:
+    init - starting
+    pass - sending to other client
+    close - ending
+    */
+    connection.onmessage = function (message) {
+        console.log("Recieved: " + message.data);
+
+        try {
+            var data = JSON.parse(message.data);
+        } catch (e) {
+            console.log('Invalid JSON: ', message.data);
+            return;
+        }
+
+        if(data.purpose == "init"){
+            if (data.room == "-1") {
                 $('#incorrect').show();
                 $('#incorrect').text('Incorrect pin.');
             }
             else {
-                $('#incorrect').hide();
-                $( "#gamePin" ).text("Waiting...");
-                $( "#pin" ).text("");
-                room = val.toLowerCase();
-                user = "j";
-                peer = new SimplePeer();
-                InitSockets();
-                PollForUpdate();
+                room = data.pin;
+                if (data.data == "sent") {
+                    var json = JSON.stringify({type:"message", purpose:"pass", data:{
+                        user: user,
+                        room: room,
+                        data: "start"
+                    }});
+                    document.onkeydown = CheckKey;
+                    $('#gameScreen').hide();
+                    $('#createScreen').hide();
+                    $('#mainScreen').hide(); 
+                    $('#aaa').show();
+
+                    console.log("Sent: " + json);
+
+                    connection.send(json);
+                }
+                else {
+                    $( "#gamePin" ).text(data.pin);
+                }
             }
-        });
+        }
+        else if(data.purpose == "pass"){
+            console.log(data.data.data);
+            if (data.data.data == "start") {
+                    $('#gameScreen').show();
+                    $('#createScreen').hide();
+                    $('#mainScreen').hide();
+                    requestAnimationFrame(mainLoop);
+                audio = new Audio('mii.m4a');
+                audio.loop = true;
+                audio.play();
+            }
+            else {
+                if (data.data.data == '38') {
+                    window.s.rotateShape(window.cell);
+                }
+                else if (data.data.data == '40') {
+                    window.s.moveDown(window.cell);
+                }
+                else if (data.data.data == '37') {
+                  window.s.moveLeft(window.cell);
+                }
+                else if (data.data.data == '39') {
+                    window.s.moveRight(window.cell);
+                }
+                else {
+                  var out = String(data.data.data).split(':');
+                  endWindow.style.display = "block";
+                  document.getElementById("finalScore").innerHTML = "Score: " + out[1];
+                  document.getElementById("finalLines").innerHTML = "Lines filled: " + out[2];
+                  $('#gameScreen').hide();
+                  audio.pause();
+                }
+            }
+        }
+        
     }
 
 });
