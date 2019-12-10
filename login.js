@@ -15,6 +15,7 @@ $(document).ready(function() {
     }
     $('#createScreen').hide();
     $('#gameScreen').hide();
+    $('#helpScreen').hide();
     $('#aaa').hide();
 
     $('#incorrect').hide();
@@ -101,6 +102,16 @@ $(document).ready(function() {
     $("#back").click(function() {
         $( "#mainScreen" ).fadeIn();
         $( "#createScreen" ).hide();
+    });
+
+    $("#helpButton").click(function(){
+        $("#mainScreen").hide();
+        $("#helpScreen").fadeIn();
+    });
+
+    $("#backHelpToMain").click(function(){
+        $("#mainScreen").fadeIn();
+        $("#helpScreen").hide();
     });
     
     function GetPin() { // For Create Game
