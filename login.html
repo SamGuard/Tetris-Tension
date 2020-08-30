@@ -1,8 +1,8 @@
 <html lang="en" >
     <head>
         <script>
-            if(!window.location.includes("https")){
-                window.location = 'https://two-p-tetris.herokuapp.com';
+            if (location.protocol !== 'https:') {
+                    location.replace(`https:${location.href.substring(location.protocol.length)}`);
             }
         </script>
         <title>Tetris Tension</title>
